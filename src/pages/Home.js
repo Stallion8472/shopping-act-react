@@ -2,37 +2,73 @@ import React, { useState, useEffect } from "react";
 import NewItemsBanner from "../components/NewItemsBanner.js";
 import styled from "styled-components";
 import axios from "axios";
+import { device } from "../breakpoints.js";
 
 const Container = styled.div`
   display: flex;
-  font-size: calc(10px + 2vmin);
-  color: white;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
 
-const SearchBox = styled.input`
-  color: black;
-  padding: 0 0.25em;
-  margin: 1em;
-  border-radius: 5px;
+const NewItemText = styled.h2`
+  font-size: x-large;
+  width: 100%;
+  text-align: center;
+
+  @media ${device.tablet} {
+    text-align: initial;
+  }
 `;
 
-function Home() {
+const BannerContainer = styled.div`
+  width: 100%;
+  margin: 0.5rem 0.5rem;
+
+  @media ${device.tablet} {
+    padding: 0.5rem 1rem;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: xx-large;
+  text-align: center;
+  margin: 10rem 0;
+`;
+
+function Home(props) {
   const [items, setItems] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
 
   useEffect(() => {
     axios.get(`/api/newItems`).then((res) => {
-      setItems(res.data);
+      setItems(res.data.items);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`/api/favItems`).then((res) => {
+      setFavoriteItems(res.data.items);
     });
   }, []);
 
   return (
     <Container>
-      <SearchBox type="search" placeholder="Search"></SearchBox>
-      <h2>New items this year</h2>
-      <NewItemsBanner itemsData={items}></NewItemsBanner>
+      <Title>Welcome to Favorite Things!</Title>
+      <BannerContainer>
+        <NewItemText>New items this year</NewItemText>
+        <NewItemsBanner
+          itemsData={items}
+          cartFunctions={props.cartFunctions}
+        ></NewItemsBanner>
+      </BannerContainer>
+      <BannerContainer>
+        <NewItemText>Favorite items of last year</NewItemText>
+        <NewItemsBanner
+          itemsData={favoriteItems}
+          cartFunctions={props.cartFunctions}
+        ></NewItemsBanner>
+      </BannerContainer>
     </Container>
   );
 }

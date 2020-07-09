@@ -6,9 +6,7 @@ import App from './pages/App.js';
 import * as serviceWorker from './serviceWorker';
 import { makeServer } from './Mirage.js';
 
-if (process.env.NODE_ENV === "development") {
-  makeServer({ environment: "development" })
-}
+makeServer()
 
 ReactDOM.render(
   <React.StrictMode>
