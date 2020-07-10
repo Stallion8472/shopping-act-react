@@ -11,7 +11,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f7f7f7;
+  color: #1a202c;
 `;
 
 const CurrentPage = styled.div`
@@ -28,13 +28,14 @@ function updateLocalStorage(map) {
 }
 
 function mapFromObject(object) {
+  const keys = Object.keys(object)
+  keys.forEach(key => {
+    if(object[key].quantity < 1 || object[key].price < 1){
+      delete object[key]
+    }
+  });
   return new Map(Object.entries(object));
 }
-
-const user = {
-  FirstName: "Justin",
-  LastName: "Stallard",
-};
 
 function App() {
   let oldCart = localStorage.getItem("ftCart");
@@ -45,14 +46,14 @@ function App() {
     updateLocalStorage(cart);
   }, [cart]);
 
-  function addItemToCart(item) {
+  function addItemToCart(item, amount = 1) {
     let prevValue = cart.get(item.id);
     if (!prevValue) {
       setCart(
-        new Map(cart.set(item.id, Object.assign({}, item, { quantity: 1 })))
+        new Map(cart.set(item.id, Object.assign({}, item, { quantity: amount })))
       );
     } else {
-      prevValue.quantity += 1;
+      prevValue.quantity += amount;
       setCart(new Map(cart.set(item.id, prevValue)));
     }
   }
@@ -69,7 +70,7 @@ function App() {
   return (
     <Container>
       <Router>
-        <Navbar user={user} cart={cart}></Navbar>
+        <Navbar cart={cart}></Navbar>
         <CurrentPage>
           <Switch>
             <Route exact path="/">

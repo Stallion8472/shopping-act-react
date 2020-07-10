@@ -8,9 +8,12 @@ const ItemBody = styled(Link)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 200px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  border-width: 1px;
+  width: 250px;
   margin: 0.5rem auto;
   background-color: white;
 
@@ -20,6 +23,9 @@ const ItemBody = styled(Link)`
 
   @media ${device.laptop} {
     width: 250px;
+  }
+  &:focus {
+    outline: none;
   }
 `;
 const Image = styled.img`
@@ -34,10 +40,18 @@ const ItemDetails = styled.div`
   margin: 1rem 0;
 `;
 
+const ItemName = styled.span`
+  font-weight: 600;
+  font-size: large;
+`;
+
 const AddButton = styled.button`
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 5px;
-  background-color: #ed8936;
+  background-color: #f6ad55;
+  &:hover {
+    background-color: #ed8936;
+  }
 `;
 
 function Item(props) {
@@ -45,9 +59,10 @@ function Item(props) {
     <ItemBody to={`item/${props.item.id}`} key={props.item.id}>
       <Image src={`/${props.item.url}`} alt="item img"></Image>
       <ItemDetails>
-        <span>
-          {props.item.name} | ${props.item.price}
-        </span>
+        <div>
+          <ItemName>{props.item.name}</ItemName>
+          <span> ${props.item.price}</span>
+        </div>
         <AddButton
           onClick={(e) => {
             e.preventDefault();

@@ -1,16 +1,26 @@
 import { Server, Model } from "miragejs";
 
+const ITEMS_PER_PAGE = 3;
+
 export function makeServer() {
   return new Server({
     models: {
       item: Model,
     },
-    
+
     routes() {
       this.namespace = "api";
 
-      this.get("/items", (schema) => {
-        return schema.items.all();
+      this.get("/items", (schema, request) => {
+        const page = request.queryParams.page
+        let items = schema.items.all()
+        const totalItems = items.length / ITEMS_PER_PAGE
+        const upperSlice = page * ITEMS_PER_PAGE > items.length ? items.length : page * ITEMS_PER_PAGE;
+        items = items.models.slice(
+          ITEMS_PER_PAGE * page - 3,
+          upperSlice
+        );
+        return {items, totalItems}
       });
 
       this.get("/items/:id", (schema, request) => {
@@ -32,14 +42,14 @@ export function makeServer() {
         year: 2020,
         url: "1.jpg",
         price: 5,
-        description: "Best food you've ever tasted",
+        description: "The best food you've ever tasted",
       });
       server.create("item", {
         name: "Book",
         year: 2014,
         url: "2.jpg",
         price: 3,
-        description: "Long, but enjoyable read",
+        description: "A Long, but enjoyable read",
       });
       server.create("item", {
         name: "Car",
@@ -53,7 +63,7 @@ export function makeServer() {
         year: 2019,
         url: "4.jpg",
         price: 15,
-        description: "Loyal. Will never leave your side",
+        description: "Loyal. This bear will never leave your side",
       });
       server.create("item", {
         name: "Toilet Paper",
@@ -67,7 +77,7 @@ export function makeServer() {
         year: 2020,
         url: "6.jpg",
         price: 18,
-        description: "Only proper way of cooking food outside",
+        description: "The only proper way of cooking food outside",
       });
     },
   });

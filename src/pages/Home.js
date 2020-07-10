@@ -13,6 +13,7 @@ const Container = styled.div`
 
 const NewItemText = styled.h2`
   font-size: x-large;
+  font-weight: 600;
   width: 100%;
   text-align: center;
 
@@ -56,14 +57,14 @@ function Home(props) {
     <Container>
       <Title>Welcome to Favorite Things!</Title>
       <BannerContainer>
-        <NewItemText>New items this year</NewItemText>
+        <NewItemText>New Items this Year</NewItemText>
         <NewItemsBanner
           itemsData={items}
           cartFunctions={props.cartFunctions}
         ></NewItemsBanner>
       </BannerContainer>
       <BannerContainer>
-        <NewItemText>Favorite items of last year</NewItemText>
+        <NewItemText>Favorite Items of Last Year</NewItemText>
         <NewItemsBanner
           itemsData={favoriteItems}
           cartFunctions={props.cartFunctions}
