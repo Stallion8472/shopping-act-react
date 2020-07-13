@@ -12,15 +12,15 @@ export function makeServer() {
       this.namespace = "api";
 
       this.get("/items", (schema, request) => {
-        const page = request.queryParams.page
-        let items = schema.items.all()
-        const totalItems = items.length / ITEMS_PER_PAGE
-        const upperSlice = page * ITEMS_PER_PAGE > items.length ? items.length : page * ITEMS_PER_PAGE;
-        items = items.models.slice(
-          ITEMS_PER_PAGE * page - 3,
-          upperSlice
-        );
-        return {items, totalItems}
+        const page = request.queryParams.page;
+        let items = schema.items.all();
+        const totalItems = items.length / ITEMS_PER_PAGE;
+        const upperSlice =
+          page * ITEMS_PER_PAGE > items.length
+            ? items.length
+            : page * ITEMS_PER_PAGE;
+        items = items.models.slice(ITEMS_PER_PAGE * page - 3, upperSlice);
+        return { items, totalItems };
       });
 
       this.get("/items/:id", (schema, request) => {
@@ -34,6 +34,7 @@ export function makeServer() {
       this.get("/favItems", (schema) => {
         return schema.items.where({ year: new Date().getFullYear() - 1 });
       });
+      this.post("/submitOrder", () => {});
     },
 
     seeds(server) {

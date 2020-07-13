@@ -6,6 +6,7 @@ import Items from "../pages/Items.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 import ItemPage from "../pages/ItemPage.js";
+import Checkout from "../pages/Checkout.js";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -67,6 +68,10 @@ function App() {
     }
   }
 
+  function clearCart(){
+    setCart(new Map())
+  }
+
   return (
     <Container>
       <Router>
@@ -84,6 +89,9 @@ function App() {
             </Route>
             <Route path="/cart">
               <Cart cart={cart} cartFunctions={removeItemFromCart} />
+            </Route>
+            <Route path="/checkout">
+              <Checkout cart={cart} clearCart={clearCart}/>
             </Route>
           </Switch>
         </CurrentPage>

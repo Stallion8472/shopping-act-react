@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { device } from "../breakpoints.js";
 import { Link } from "react-router-dom";
-import Modal from "../components/Modal.js";
 
 const FlexColumn = styled.div`
   display: flex;
@@ -66,13 +65,10 @@ const Image = styled.img`
   object-fit: contain;
 `;
 
-const Button = styled.button`
+const CheckoutLink = styled(Link)`
   padding: 0.25rem 0.75rem;
   border-radius: 5px;
   padding: 0.25rem 1rem;
-`;
-
-const CheckoutButton = styled(Button)`
   background-color: #f6ad55;
   &:hover {
     background-color: #ed8936;
@@ -88,12 +84,6 @@ function subTotal(cart) {
 }
 
 function Cart(props) {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  function showModal(visible) {
-    setModalVisible(visible);
-  }
-
   if (props.cart.size === 0) {
     return (
       <Container>
@@ -103,7 +93,6 @@ function Cart(props) {
   }
   return (
     <Container>
-      {modalVisible && <Modal showModal={showModal}></Modal>}
       <LeftColumnItems>
         {[...props.cart.keys()].map((item) => (
           <Item key={item}>
@@ -118,18 +107,16 @@ function Cart(props) {
                 <span>Quantity: {props.cart.get(item).quantity}</span>
                 <span>Price: ${props.cart.get(item).price}</span>
               </ItemDetails>
-              <CheckoutButton onClick={() => props.cartFunctions(item)}>
+              <CheckoutLink onClick={() => props.cartFunctions(item)}>
                 Delete
-              </CheckoutButton>
+              </CheckoutLink>
             </ItemContents>
           </Item>
         ))}
       </LeftColumnItems>
       <RightColumnShipping>
         <Title>Subtotal: ${subTotal(props.cart)}</Title>
-        <CheckoutButton onClick={() => setModalVisible(true)}>
-          Checkout
-        </CheckoutButton>
+        <CheckoutLink to="/checkout">Checkout</CheckoutLink>
       </RightColumnShipping>
     </Container>
   );
