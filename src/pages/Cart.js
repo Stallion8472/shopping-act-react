@@ -26,7 +26,7 @@ const LeftColumnItems = styled.ul`
 
 const RightColumnShipping = styled(FlexColumn)`
   align-items: flex-start;
-  padding: .25rem 0 0 0;
+  padding: 0.25rem 0 0 0;
   border-top-width: 2px;
   border-color: rgba(237, 242, 247, 1);
 
@@ -79,28 +79,6 @@ const CheckoutButton = styled(Button)`
   }
 `;
 
-function cartItems(cart, cartFunctions) {
-  return [...cart.keys()].map((item) => (
-    <Item key={item}>
-      <Image src={`/${cart.get(item).url}`} alt="item img"></Image>
-      <ItemContents>
-        <ItemDetails>
-          <Title>
-            <ItemLink to={`item/${cart.get(item).id}`}>
-              {cart.get(item).name}
-            </ItemLink>
-          </Title>
-          <span>Quantity: {cart.get(item).quantity}</span>
-          <span>Price: ${cart.get(item).price}</span>
-        </ItemDetails>
-        <CheckoutButton onClick={() => cartFunctions(item)}>
-          Delete
-        </CheckoutButton>
-      </ItemContents>
-    </Item>
-  ));
-}
-
 function subTotal(cart) {
   let total = 0;
   for (let [, v] of cart) {
@@ -110,10 +88,10 @@ function subTotal(cart) {
 }
 
 function Cart(props) {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  function showModal(visible){
-    setModalVisible(visible)
+  function showModal(visible) {
+    setModalVisible(visible);
   }
 
   if (props.cart.size === 0) {
@@ -127,11 +105,31 @@ function Cart(props) {
     <Container>
       {modalVisible && <Modal showModal={showModal}></Modal>}
       <LeftColumnItems>
-        {cartItems(props.cart, props.cartFunctions)}
+        {[...props.cart.keys()].map((item) => (
+          <Item key={item}>
+            <Image src={`/${props.cart.get(item).url}`} alt="item img"></Image>
+            <ItemContents>
+              <ItemDetails>
+                <Title>
+                  <ItemLink to={`item/${props.cart.get(item).id}`}>
+                    {props.cart.get(item).name}
+                  </ItemLink>
+                </Title>
+                <span>Quantity: {props.cart.get(item).quantity}</span>
+                <span>Price: ${props.cart.get(item).price}</span>
+              </ItemDetails>
+              <CheckoutButton onClick={() => props.cartFunctions(item)}>
+                Delete
+              </CheckoutButton>
+            </ItemContents>
+          </Item>
+        ))}
       </LeftColumnItems>
       <RightColumnShipping>
         <Title>Subtotal: ${subTotal(props.cart)}</Title>
-        <CheckoutButton onClick={() => setModalVisible(true)}>Checkout</CheckoutButton>
+        <CheckoutButton onClick={() => setModalVisible(true)}>
+          Checkout
+        </CheckoutButton>
       </RightColumnShipping>
     </Container>
   );

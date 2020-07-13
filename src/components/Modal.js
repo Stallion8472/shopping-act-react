@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { device } from "../breakpoints.js";
 
 const Background = styled.div`
   position: fixed;
@@ -18,19 +19,37 @@ const Container = styled.div`
   background-color: white;
   margin: 1em;
   height: 95vh;
+  padding: 2em 1em 0 1em;
 `;
 
 const TitleBar = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: 2em 1em 0 1em;
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1em 1em 0 1em;
+`;
+
+const SectionContent = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media ${device.tablet} {
+    flex-direction: row;
+  }
+`;
+
+const ItemGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  width: 100%;
+  @media ${device.tablet} {
+    margin: 1rem 1rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -39,23 +58,36 @@ const Title = styled.h1`
 `;
 
 const BasicLabel = styled.label`
-  line-height: 2;
 `;
 
 const BasicInput = styled.input`
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 8px;
-  background-color: #E2E8F0;
+  background-color: #e2e8f0;
+  flex-grow: 1;
+
+  &:focus{
+    background-color: white;
+  }
+`;
+
+const BasicSelect = styled.select`
+  padding: .5rem 1rem 0.5rem 0.5rem;
+  border-radius: 8px;
+  background-color: #e2e8f0;
+
+  &:focus{
+    background-color: white;
+  }
 `;
 
 const Button = styled.button`
-  margin: 1em 0 0 0;
   padding: 0.5em 1em;
   color: black;
   border-radius: 8px;
-  background-color: #F6AD55;
-  &:hover{
-    background-color: #ED8936;
+  background-color: #f6ad55;
+  &:hover {
+    background-color: #ed8936;
   }
 `;
 
@@ -82,19 +114,41 @@ function Modal(props) {
           </button>
         </TitleBar>
         <Content>
-          <BasicLabel>Street</BasicLabel>
-          <BasicInput type="text"></BasicInput>
-          <BasicLabel>City</BasicLabel>
-          <BasicInput type="text"></BasicInput>
-          <BasicLabel>State</BasicLabel>
-          <select>
-            <option value="KS">Kansas</option>
-            <option value="OH">Ohio</option>
-            <option value="KY">Kentucky</option>
-            <option value="NY">New York</option>
-          </select>
-          <BasicLabel>Zip</BasicLabel>
-          <BasicInput type="number"></BasicInput>
+        <SectionContent>
+            <ItemGroup>
+              <BasicLabel>First Name</BasicLabel>
+              <BasicInput type="text"></BasicInput>
+            </ItemGroup>
+            <ItemGroup>
+              <BasicLabel>Last Name</BasicLabel>
+              <BasicInput type="text"></BasicInput>
+            </ItemGroup>
+          </SectionContent>
+          <SectionContent>
+            <ItemGroup>
+              <BasicLabel>Street</BasicLabel>
+              <BasicInput type="text"></BasicInput>
+            </ItemGroup>
+            <ItemGroup>
+              <BasicLabel>City</BasicLabel>
+              <BasicInput type="text"></BasicInput>
+            </ItemGroup>
+          </SectionContent>
+          <SectionContent>
+            <ItemGroup>
+              <BasicLabel>State</BasicLabel>
+              <BasicSelect>
+                <option value="KS">Kansas</option>
+                <option value="OH">Ohio</option>
+                <option value="KY">Kentucky</option>
+                <option value="NY">New York</option>
+              </BasicSelect>
+            </ItemGroup>
+            <ItemGroup>
+              <BasicLabel>Zip</BasicLabel>
+              <BasicInput type="number"></BasicInput>
+            </ItemGroup>
+          </SectionContent>
           <Button>Submit</Button>
         </Content>
       </Container>
